@@ -20,12 +20,16 @@ A modern, fullstack queue management system built with Java Spring Boot and a be
 ### Technical Features
 - **Real-time Communication**: WebSocket integration for instant updates
 - **RESTful API**: Clean API endpoints for all operations
+- **Database Integration**: H2 in-memory database with JPA/Hibernate
+- **Data Persistence**: Queue data persists during application session
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Modern UI/UX**: Bootstrap 5 with custom styling and animations
 
 ## Technology Stack
 
 - **Backend**: Java 17, Spring Boot 3.2.0
+- **Database**: H2 In-Memory Database
+- **ORM**: JPA/Hibernate
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Real-time**: WebSocket with STOMP protocol
 - **UI Framework**: Bootstrap 5
@@ -60,6 +64,10 @@ A modern, fullstack queue management system built with Java Spring Boot and a be
 4. **Access the application**
    - Customer Interface: http://localhost:8080
    - Admin Panel: http://localhost:8080/admin
+   - H2 Database Console: http://localhost:8080/h2-console
+     - JDBC URL: `jdbc:h2:mem:queuedb`
+     - Username: `sa`
+     - Password: `password`
 
 ## Usage
 
@@ -90,6 +98,24 @@ A modern, fullstack queue management system built with Java Spring Boot and a be
 - `/ws` - WebSocket connection endpoint
 - `/topic/queue` - Queue updates
 - `/topic/notifications` - System notifications
+
+## Database Schema
+
+The system uses an H2 in-memory database with the following table:
+
+### `queue_items` Table
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | BIGINT | Primary key (auto-generated) |
+| `name` | VARCHAR | Customer's full name |
+| `phone_number` | VARCHAR | Customer's phone number |
+| `service` | VARCHAR | Type of service requested |
+| `join_time` | TIMESTAMP | When customer joined the queue |
+| `position` | INTEGER | Position in queue (1-based) |
+| `status` | VARCHAR | Status: WAITING, IN_SERVICE, COMPLETED |
+
+### Sample Data
+The application initializes with 3 sample customers for testing purposes.
 
 ## Project Structure
 

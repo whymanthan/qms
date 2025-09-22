@@ -1,59 +1,77 @@
 package com.queue.service;
 
 import com.queue.model.QueueItem;
+import com.queue.repository.QueueItemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
+@Transactional
 public class QueueService {
-    private final List<QueueItem> queue = new ArrayList<>();
-    private final AtomicLong idGenerator = new AtomicLong(1);
+    
+    @Autowired
+    private QueueItemRepository queueItemRepository;
 
     public QueueItem addToQueue(String name, String phoneNumber, String service) {
         QueueItem item = new QueueItem(name, phoneNumber, service);
-        item.setId(idGenerator.getAndIncrement());
-        item.setPosition(queue.size() + 1);
-        queue.add(item);
-        return item;
+        item.setJoinTime(LocalDateTime.now());
+        item.setStatus("WAITING");
+        
+        // Get the next position
+        long queueSize = queueItemRepository.countByStatus("WAITING");
+        item.setPosition((int) queueSize + 1);
+        
+        return queueItemRepository.save(item);
     }
 
     public QueueItem getNext() {
-        if (queue.isEmpty()) {
-            return null;
+        QueueItem next = queueItemRepository.findNextInQueue();
+        if (next != null) {
+            next.setStatus("IN_SERVICE");
+            queueItemRepository.save(next);
+            updatePositions();
         }
-        QueueItem next = queue.remove(0);
-        updatePositions();
         return next;
     }
 
     public boolean removeFromQueue(Long id) {
-        return queue.removeIf(item -> item.getId().equals(id));
+        if (queueItemRepository.existsById(id)) {
+            queueItemRepository.deleteById(id);
+            updatePositions();
+            return true;
+        }
+        return false;
     }
 
     public List<QueueItem> getQueue() {
-        return new ArrayList<>(queue);
+        return queueItemRepository.findByStatusOrderByPositionAsc("WAITING");
     }
 
     public QueueItem getQueueItem(Long id) {
-        return queue.stream()
-                .filter(item -> item.getId().equals(id))
+        return queueItemRepository.findById(id).orElse(null);
+    }
+
+    public int getQueueSize() {
+        return (int) queueItemRepository.countByStatus("WAITING");
+    }
+
+    public QueueItem getCurrentServing() {
+        return queueItemRepository.findByStatusOrderByPositionAsc("IN_SERVICE")
+                .stream()
                 .findFirst()
                 .orElse(null);
     }
 
-    public int getQueueSize() {
-        return queue.size();
-    }
-
-    public QueueItem getCurrentServing() {
-        return queue.isEmpty() ? null : queue.get(0);
-    }
-
     private void updatePositions() {
-        for (int i = 0; i < queue.size(); i++) {
-            queue.get(i).setPosition(i + 1);
+        List<QueueItem> waitingItems = queueItemRepository.findByStatusOrderByPositionAsc("WAITING");
+        for (int i = 0; i < waitingItems.size(); i++) {
+            QueueItem item = waitingItems.get(i);
+            item.setPosition(i + 1);
+            queueItemRepository.save(item);
         }
     }
 }

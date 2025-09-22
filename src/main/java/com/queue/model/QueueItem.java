@@ -1,14 +1,31 @@
 package com.queue.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "queue_items")
 public class QueueItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(nullable = false)
     private String name;
+    
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+    
+    @Column(nullable = false)
     private String service;
+    
+    @Column(name = "join_time", nullable = false)
     private LocalDateTime joinTime;
+    
+    @Column(nullable = false)
     private int position;
+    
+    @Column(nullable = false)
     private String status; // WAITING, IN_SERVICE, COMPLETED
 
     public QueueItem() {}
