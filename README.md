@@ -1,19 +1,19 @@
-# Queue Management System
+# Hospital Queue Management System
 
-A modern, fullstack queue management system built with Java Spring Boot and a beautiful web interface. This system allows customers to join a service queue and provides real-time updates to both customers and administrators.
+A modern, fullstack hospital queue management system built with Java Spring Boot and a beautiful web interface. This system allows patients to join hospital department queues and provides real-time updates to both patients and hospital staff.
 
 ## Features
 
-### Customer Features
-- **Join Queue**: Customers can join the queue by providing their name, phone number, and service type
+### Patient Features
+- **Join Queue**: Patients can join the hospital queue by providing their name, phone number, and department
 - **Real-time Updates**: Live queue position updates and notifications
 - **Queue Status**: View current queue size and estimated wait time
 - **Modern UI**: Beautiful, responsive interface with smooth animations
 
-### Admin Features
-- **Queue Management**: View and manage the entire queue
-- **Call Next**: Call the next person in line
-- **Remove Customers**: Remove customers from the queue if needed
+### Hospital Staff Features
+- **Queue Management**: View and manage the entire patient queue
+- **Call Next**: Call the next patient in line
+- **Remove Patients**: Remove patients from the queue if needed
 - **Real-time Statistics**: Live updates of queue statistics
 - **Admin Dashboard**: Comprehensive admin panel with queue analytics
 
@@ -71,18 +71,18 @@ A modern, fullstack queue management system built with Java Spring Boot and a be
 
 ## Usage
 
-### For Customers
+### For Patients
 1. Open http://localhost:8080 in your browser
-2. Fill in your details (Name, Phone, Service Type)
-3. Click "Join Queue" to get your position
+2. Fill in your details (Name, Phone, Department)
+3. Click "Join Hospital Queue" to get your position
 4. Watch your position update in real-time
 5. Wait for your turn to be called
 
-### For Administrators
+### For Hospital Staff
 1. Open http://localhost:8080/admin in your browser
 2. View current queue statistics
-3. Use "Call Next Person" to serve the next customer
-4. Remove customers from queue if necessary
+3. Use "Call Next Patient" to serve the next patient
+4. Remove patients from queue if necessary
 5. Monitor real-time queue updates
 
 ## API Endpoints
@@ -107,15 +107,19 @@ The system uses an H2 in-memory database with the following table:
 | Column | Type | Description |
 |--------|------|-------------|
 | `id` | BIGINT | Primary key (auto-generated) |
-| `name` | VARCHAR | Customer's full name |
-| `phone_number` | VARCHAR | Customer's phone number |
-| `service` | VARCHAR | Type of service requested |
-| `join_time` | TIMESTAMP | When customer joined the queue |
+| `name` | VARCHAR | Patient's full name |
+| `phone_number` | VARCHAR | Patient's phone number |
+| `service` | VARCHAR | Hospital department/service |
+| `join_time` | TIMESTAMP | When patient joined the queue |
 | `position` | INTEGER | Position in queue (1-based) |
 | `status` | VARCHAR | Status: WAITING, IN_SERVICE, COMPLETED |
 
 ### Sample Data
-The application initializes with 3 sample customers for testing purposes.
+The application initializes with 4 sample patients for testing purposes:
+- Sarah Johnson (Cardiology)
+- Michael Chen (Emergency) 
+- Emily Rodriguez (Pediatrics)
+- David Thompson (Orthopedics)
 
 ## Project Structure
 

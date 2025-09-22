@@ -94,4 +94,17 @@ public class QueueController {
         
         return ResponseEntity.ok(status);
     }
+
+    @DeleteMapping("/clear")
+    public ResponseEntity<Map<String, Object>> clearQueue() {
+        queueService.clearQueue();
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Queue cleared successfully");
+        
+        // Broadcast updates
+        webSocketController.broadcastQueueUpdate();
+        
+        return ResponseEntity.ok(response);
+    }
 }

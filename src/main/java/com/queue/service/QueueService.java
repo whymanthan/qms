@@ -66,6 +66,10 @@ public class QueueService {
                 .orElse(null);
     }
 
+    public void clearQueue() {
+        queueItemRepository.deleteAll();
+    }
+
     private void updatePositions() {
         List<QueueItem> waitingItems = queueItemRepository.findByStatusOrderByPositionAsc("WAITING");
         for (int i = 0; i < waitingItems.size(); i++) {
