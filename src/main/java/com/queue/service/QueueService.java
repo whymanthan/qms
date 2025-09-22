@@ -29,7 +29,7 @@ public class QueueService {
     }
 
     public QueueItem getNext() {
-        QueueItem next = queueItemRepository.findNextInQueue();
+        QueueItem next = queueItemRepository.findFirstByStatusOrderByPositionAsc("WAITING").orElse(null);
         if (next != null) {
             next.setStatus("IN_SERVICE");
             queueItemRepository.save(next);
