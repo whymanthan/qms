@@ -1,13 +1,16 @@
 @echo off
-echo Starting Queue Management System...
+echo 🏥 Hospital Queue Management System
+echo ===================================
 echo.
-echo Make sure you have Java 17+ and Maven installed.
-echo.
-echo If Maven is not in your PATH, you can:
-echo 1. Install Maven from https://maven.apache.org/download.cgi
-echo 2. Add Maven to your system PATH
-echo 3. Or use your IDE to run the application
+echo Compiling Java files...
+javac *.java
+if %errorlevel% neq 0 (
+    echo ❌ Compilation failed!
+    pause
+    exit /b 1
+)
+echo ✅ Compilation successful!
 echo.
 echo Starting application...
-mvn spring-boot:run
+java HospitalQueueApp
 pause
